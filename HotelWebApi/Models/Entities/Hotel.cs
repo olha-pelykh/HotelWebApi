@@ -1,0 +1,14 @@
+﻿namespace HotelWebApi.Models.Entities
+{
+    public class Hotel
+    {
+        public Guid ID { get; set; }
+        public string HotelName { get; set; } = string.Empty;
+        public string HotelDescription { get; set; } = string.Empty;
+
+        public string HotelAddress { get; set; } = string.Empty;
+        public string HotelPhone { get; set; } = string.Empty;
+        public string HotelEmail { get; set; } = string.Empty;
+
+    }
+}
