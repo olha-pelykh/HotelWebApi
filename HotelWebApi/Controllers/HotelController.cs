@@ -1,93 +1,134 @@
 ﻿using HotelWebApi.Data;
-using HotelWebApi.Models;
-using HotelWebApi.Models.Entities;
-using Microsoft.AspNetCore.Http;
+using HotelWebApi.Models.ViewModels;
+using HotelWebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelWebApi.Controllers
 {
     [Route("api/[controller]")]
+
     [ApiController]
     public class HotelController : ControllerBase
     {
         private readonly ApplicationDBContext dbContext;
-        public HotelController(ApplicationDBContext dBContext)
+        private readonly IHotelMappingService mappingService;
+
+        public HotelController(ApplicationDBContext dBContext, IHotelMappingService mappingService)
         {
             this.dbContext = dBContext;
+            this.mappingService = mappingService;
         }
 
         [HttpGet]
-        public IActionResult GetAllHotels()
+        public async Task<ActionResult<IEnumerable<HotelListViewModel>>> GetAllHotels()
         {
-            return Ok(dbContext.Hotels.ToList());
-        }
-
-        [HttpGet]
-        [Route("{id:guid}")]    
-        public IActionResult GetHotelByID(Guid id)
-        {
-            var hotel = dbContext.Hotels.Find(id);
-            if (hotel is null)
+            try
             {
-                return NotFound();
+                var hotels = await dbContext.Hotels.ToListAsync();
+                var hotelViewModels = mappingService.ToListViewModelList(hotels);
+                return Ok(hotelViewModels);
             }
-            return Ok(hotel);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<HotelViewModel>> GetHotelByID(Guid id)
+        {
+            try
+            {
+                var hotel = await dbContext.Hotels.FindAsync(id);
+                if (hotel == null)
+                {
+                    return NotFound($"Hotel with ID {id} not found.");
+                }
+
+                var hotelViewModel = mappingService.ToViewModel(hotel);
+                return Ok(hotelViewModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost]
-        public IActionResult AddHotel(AddHotelDto addHotelDto)
+        public async Task<ActionResult<HotelViewModel>> AddHotel(CreateHotelViewModel createHotelViewModel)
         {
-            var hotelEntity = new Hotel()
+            if (!ModelState.IsValid)
             {
-                HotelName = addHotelDto.HotelName,
-                HotelDescription = addHotelDto.HotelDescription,
-                HotelAddress = addHotelDto.HotelAddress,
-                HotelPhone = addHotelDto.HotelPhone,
-                HotelEmail = addHotelDto.HotelEmail
-            };
+                return BadRequest(ModelState);
+            }
 
-            dbContext.Hotels.Add(hotelEntity);
-            dbContext.SaveChanges();
+            try
+            {
+                var hotelEntity = mappingService.ToEntity(createHotelViewModel);
+                dbContext.Hotels.Add(hotelEntity);
+                await dbContext.SaveChangesAsync();
 
-            return Ok(hotelEntity);
+                var hotelViewModel = mappingService.ToViewModel(hotelEntity);
+                return CreatedAtAction(nameof(GetHotelByID), new { id = hotelEntity.ID }, hotelViewModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPut]
         [Route("{id:guid}")]
-        public IActionResult UpdateHotel(Guid id, UpdateHotelDto updateHotelDto)
+        public async Task<ActionResult<HotelViewModel>> UpdateHotel(Guid id, UpdateHotelViewModel updateHotelViewModel)
         {
-            var hotel = dbContext.Hotels.Find(id);
-            if (hotel is null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            hotel.HotelName = updateHotelDto.HotelName;
-            hotel.HotelDescription = updateHotelDto.HotelDescription;
-            hotel.HotelAddress = updateHotelDto.HotelAddress;
-            hotel.HotelPhone = updateHotelDto.HotelPhone;
-            hotel.HotelEmail = updateHotelDto.HotelEmail;
-           
-            dbContext.SaveChanges();
+            try
+            {
+                var hotel = await dbContext.Hotels.FindAsync(id);
+                if (hotel == null)
+                {
+                    return NotFound($"Hotel with ID {id} not found.");
+                }
 
-            return Ok(hotel);
+                mappingService.UpdateEntity(hotel, updateHotelViewModel);
+                await dbContext.SaveChangesAsync();
+
+                var hotelViewModel = mappingService.ToViewModel(hotel);
+                return Ok(hotelViewModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-        [HttpDelete]
+        [HttpDelete]                
         [Route("{id:guid}")]
-        public IActionResult DeleteHotel(Guid id)
+        public async Task<IActionResult> DeleteHotel(Guid id)
         {
-            var hotel = dbContext.Hotels.Find(id);
-            if (hotel is null)
+            try
             {
-                return NotFound();
+                var hotel = await dbContext.Hotels.FindAsync(id);
+                if (hotel == null)
+                {
+                    return NotFound($"Hotel with ID {id} not found.");
+                }
+
+                dbContext.Hotels.Remove(hotel);
+                await dbContext.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            dbContext.Hotels.Remove(hotel);
-            dbContext.SaveChanges();
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

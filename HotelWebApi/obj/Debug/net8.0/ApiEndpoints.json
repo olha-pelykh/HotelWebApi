@@ -7,7 +7,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[HotelWebApi.Models.ViewModels.HotelListViewModel, HotelWebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "HotelWebApi.Controllers.HotelController",
@@ -18,12 +28,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "addHotelDto",
-        "Type": "HotelWebApi.Models.AddHotelDto",
+        "Name": "createHotelViewModel",
+        "Type": "HotelWebApi.Models.ViewModels.CreateHotelViewModel",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "HotelWebApi.Models.ViewModels.HotelViewModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "HotelWebApi.Controllers.HotelController",
@@ -39,7 +59,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "HotelWebApi.Models.ViewModels.HotelViewModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "HotelWebApi.Controllers.HotelController",
@@ -55,12 +85,22 @@
         "IsRequired": true
       },
       {
-        "Name": "updateHotelDto",
-        "Type": "HotelWebApi.Models.UpdateHotelDto",
+        "Name": "updateHotelViewModel",
+        "Type": "HotelWebApi.Models.ViewModels.UpdateHotelViewModel",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "HotelWebApi.Models.ViewModels.HotelViewModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "HotelWebApi.Controllers.HotelController",
@@ -77,26 +117,5 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HotelWebApi.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[HotelWebApi.WeatherForecast, HotelWebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ],
-    "EndpointName": "GetWeatherForecast"
   }
 ]

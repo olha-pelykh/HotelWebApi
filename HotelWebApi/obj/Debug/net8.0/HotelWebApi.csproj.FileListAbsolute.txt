@@ -169,3 +169,4 @@ C:\Users\Sunada\OneDrive\Політехніка\КОНСТРУЮВАННЯ ПР�
 C:\Users\Sunada\OneDrive\Політехніка\КОНСТРУЮВАННЯ ПРОГРАМНОГО ЗАБЕЗПЕЧЕННЯ\New folder\HotelWebApi\HotelWebApi\obj\Debug\net8.0\HotelWebApi.genruntimeconfig.cache
 C:\Users\Sunada\OneDrive\Політехніка\КОНСТРУЮВАННЯ ПРОГРАМНОГО ЗАБЕЗПЕЧЕННЯ\New folder\HotelWebApi\HotelWebApi\obj\Debug\net8.0\ref\HotelWebApi.dll
 C:\Users\Sunada\OneDrive\Політехніка\КОНСТРУЮВАННЯ ПРОГРАМНОГО ЗАБЕЗПЕЧЕННЯ\New folder\HotelWebApi\HotelWebApi\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\Sunada\OneDrive\Політехніка\КОНСТРУЮВАННЯ ПРОГРАМНОГО ЗАБЕЗПЕЧЕННЯ\New folder\HotelWebApi\HotelWebApi\obj\Debug\net8.0\HotelWebApi.sourcelink.json
